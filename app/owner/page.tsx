@@ -1,0 +1,5 @@
+import { requireChatGPTUser,chatGPTSignOutPath } from '../chatgpt-auth';
+import { isOwner,listTests,Test } from '../library';
+import Upload from './upload';
+export const dynamic='force-dynamic';
+export default async function Owner(){await requireChatGPTUser('/owner');if(!await isOwner())return <main><h1>Owner access only</h1><p>Sign in with the ChatGPT account that owns this site.</p><a href={chatGPTSignOutPath('/owner')} target="_top">Sign out</a></main>;let tests:Test[]=[];let unavailable=false;try{tests=await listTests();}catch(e){console.error(e);unavailable=true;}return <><header><a className="brand" href="/"><span className="logo">pr.</span>Practice Room</a><a href="/">Public library</a><a href={chatGPTSignOutPath('/')} target="_top">Sign out</a></header><main className="owner-main"><p className="eyebrow">PRIVATE OWNER AREA</p><h1>Build your library.</h1><p>Uploaded tests are available to everyone with the site link.</p><Upload initial={tests} unavailable={unavailable}/></main></>}
